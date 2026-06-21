@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# list that stores all messages
+# store messages here
 messages = []
 
 page = """
@@ -81,6 +81,7 @@ page = """
     <select id="timer">
         <option value="10">10 Seconds</option>
         <option value="30">30 Seconds</option>
+        <option value="0">Permanent Message</option>
     </select>
 
     <button onclick="sendMessage()">Send</button>
@@ -107,7 +108,7 @@ function loadMessages(){
                     ${msg.text}
                     <br>
                     <small>
-                        disappears in ${msg.left}s
+                        ${msg.left}
                     </small>
                 </div>
             `;
@@ -173,11 +174,14 @@ def send():
 
     data = request.get_json()
 
-    name = data["name"]
-    text = data["text"]
-    timer = int(data["timer"])
+    name = data.get("name", "")
+    text = data.get("text", "")
+    timer = int(data.get("timer", 10))
 
-    expire = datetime.now() + timedelta(seconds=timer)
+    if timer == 0:
+        expire = None
+    else:
+        expire = datetime.now() + timedelta(seconds=timer)
 
     messages.append({
         "name": name,
@@ -185,7 +189,7 @@ def send():
         "expire": expire
     })
 
-    return jsonify({"message":"saved"})
+    return jsonify({"message": "saved"})
 
 
 @app.route("/messages")
@@ -195,16 +199,21 @@ def get_messages():
 
     messages[:] = [
         m for m in messages
-        if m["expire"] > now
+        if m["expire"] is None or m["expire"] > now
     ]
 
     result = []
 
     for m in messages:
 
-        left = int(
-            (m["expire"] - now).total_seconds()
-        )
+        if m["expire"] is None:
+            left = "Permanent Message"
+        else:
+            seconds_left = int(
+                (m["expire"] - now).total_seconds()
+            )
+
+            left = f"Disappears in {seconds_left}s"
 
         result.append({
             "name": m["name"],
