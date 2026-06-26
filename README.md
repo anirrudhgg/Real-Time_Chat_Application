@@ -7,7 +7,7 @@ Deployed Live Demo: https://project-6c2cad9e-c127-49a4-aa1.ey.r.appspot.com/
 ## Project Overview  
 
 This repository contains a cloud-native, real-time customer chat application built as a proof-of-concept to modernize ShopWorld’s legacy, on-premises infrastructure.
-Traditional on-premises setups relying on synchronous HTTP polling face massive CPU overhead, high latency, and eventual system outages during peak traffic on the wesbite. This project demonstrates how migrating to a serverless, autoscaling cloud architecture permanently solves the infrastructure bottleneck while optimizing operational costs (FinOps).  
+Traditional on-premises setups relying on synchronous HTTP polling face massive CPU overhead, high latency, and eventual system outages during peak traffic on the website. This project demonstrates how migrating to a serverless, autoscaling cloud architecture permanently solves the infrastructure bottleneck while optimizing operational costs (FinOps).  
 
 
 
