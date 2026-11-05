@@ -1,0 +1,10 @@
+runtime: python312
+
+# gunicorn serves the Flask app object "app" from main.py
+entrypoint: gunicorn -b :$PORT main:app
+
+automatic_scaling:
+  # Messages are stored in memory, so every user must reach the same instance.
+  # Moving them to Firestore (see README) would allow more instances.
+  max_instances: 1
+  min_instances: 0   # scale to zero when nobody is using the app
